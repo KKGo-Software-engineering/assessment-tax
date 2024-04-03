@@ -4,8 +4,8 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ## Functional Requirement
 
-- ผู้ใช้งาน สามารถส่งข้อมูลเพื่อคำนวนภาษีได้
-- ผู้ใช้งาน แสดงภาษีที่ต้องจ่ายหรือได้รับในปีนั้นๆได้
+- ผู้ใช้งาน สามารถส่งข้อมูลเพื่อคำนวนภาษีได้ (รองรับแค่ปี 2567)
+- ผู้ใช้งาน แสดงภาษีที่ต้องจ่ายหรือได้รับในปีนั้น ๆ ได้
 - การคำนวนภาษีคำนวนจาก เงินหัก ณ ที่จ่าย / ค่าลดหย่อนส่วนตัว/ขั้นบันใดภาษี/เงินบริจาค
 - แอดมิน สามารถกำหนดค่าลดหย่อนส่วนตัวได้ โดยค่าเริ่มต้นที่ 60,000 บาท
 - การคำนวนภาษีตามขั้นบันใด
@@ -18,13 +18,19 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ## Non-Functional Requirement
 
-- Unit Test is a must
-- *MUST* use go module
-- *MUST* use PostgreSQL
-- *MUST* use go module `go mod init github.com/<your github name>/assessment`
-- *MUST* use go 1.21 or above
+- `Unit Test` is a must
+- ใช้ `go module`
+- ใช้ PostgreSQL
+- ใช้ go module `go mod init github.com/<your github name>/assessment-tax`
+- ใช้ go 1.21 or above
 - api port *MUST* get from environment variable name `PORT` (should be able to config for api start from port `:2565`)
 - database url *MUST* get from environment variable name `DATABASE_URL`
+- Uใช้se `docker-compose` สำหรับต่อ Database
+- API support `Graceful Shutdown`
+- มี Dockerfile สำหรับ build image และเป็น `Multi-stage build`
+- ใช้ `HTTP Status Code` อย่างเหมาะสม
+- ใช้ `gofmt`
+- ใช้ `go vet`
 
 ## Stories Note
 
@@ -44,7 +50,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้
 ```
 
-POST /calculation
+`POST:` /calculation
 
 ```json
 {
