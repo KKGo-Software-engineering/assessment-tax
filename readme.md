@@ -25,12 +25,13 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - ใช้ go 1.21 or above
 - api port *MUST* get from environment variable name `PORT` (should be able to config for api start from port `:2565`)
 - database url *MUST* get from environment variable name `DATABASE_URL`
-- Uใช้se `docker-compose` สำหรับต่อ Database
+- ใช้ `docker-compose` สำหรับต่อ Database
 - API support `Graceful Shutdown`
 - มี Dockerfile สำหรับ build image และเป็น `Multi-stage build`
 - ใช้ `HTTP Status Code` อย่างเหมาะสม
 - ใช้ `gofmt`
 - ใช้ `go vet`
+- แยก Branch ของแต่ละ Story และ Merge กลับไปยัง main branch
 
 ## Stories Note
 
