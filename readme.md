@@ -12,8 +12,8 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
   - รายได้ 0 - 150,000 ได้รับการยกเว้น
   - 150,001 - 500,000 อัตราภาษี 10%
   - 500,001 - 1,000,000 อัตราภาษี 15%
-  - 1,000,001 - 1,000,000 อัตราภาษี 20%
-  - มากกว่า 1,000,000 อัตราภาษี 35%
+  - 1,000,001 - 2,000,000 อัตราภาษี 20%
+  - มากกว่า 2,000,000 อัตราภาษี 35%
 - เงินบริจาคสามารถหย่อนได้สูงสุด 100,000 บาท
 
 ## Non-Functional Requirement
@@ -23,8 +23,8 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - ใช้ PostgreSQL
 - ใช้ go module `go mod init github.com/<your github name>/assessment-tax`
 - ใช้ go 1.21 or above
-- API port *MUST* get from environment variable name `PORT` (should be able to config for API start from port `:2565`)
-- database url *MUST* get from environment variable name `DATABASE_URL`
+- API port _MUST_ get from environment variable name `PORT` (should be able to config for API start from port `:2565`)
+- database url _MUST_ get from environment variable name `DATABASE_URL`
 - ใช้ `docker-compose` สำหรับต่อ Database
 - API support `Graceful Shutdown`
 - มี Dockerfile สำหรับ build image และเป็น `Multi-stage build`
@@ -46,7 +46,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ## User stories
 
-### Story 1: EXP01
+<summary>### Story: EXP01</summary>
 
 ```
 * As user, I want to calculate my tax
@@ -71,5 +71,109 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 Response body
 
 ```json
+{
+  "tax": 29000.0
+}
+```
+
+<details>
+<summary>Calculation guide</summary>
+
+500,000 (รายรับ) - 60,0000 (ค่าลดหย่อนส่วนตัว) = 440,000
+
+| Tax Level | Tax |
+|-|-|
+|0-150,000|0|
+|150,001-500,000|29,000|
+|500,001-1,000,000|0|
+|1,000,001-2,000,000|0|
+|2,000,001 ขึ้นไป|0|
+</details>
+
+<summary>### Story: EXP02</summary>
 
 ```
+* As user, I want to calculate my tax with WHT
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้ พร้อมกับข้อมูลหักภาษี ณ ที่จ่าย
+```
+
+`POST:` /calculation
+
+```json
+{
+  "totalIncome": 500000.0,
+  "wht": 25000.0,
+  "allowances": [
+    {
+      "allowanceType": "donation",
+      "amount": 0.0
+    }
+  ]
+}
+```
+
+Response body
+
+```json
+{
+  "tax": 4000.0
+}
+```
+
+<details>
+<summary>Calculation guide</summary>
+
+500,000 (รายรับ) - 60,0000 (ค่าลดหย่อนส่วนตัว) = 440,000
+
+ภาษีที่จะต้องชำระ 29,000.00 - 25,000.00 = 4,000
+
+</details>
+
+<!-- -- -->
+
+<!-- <details> -->
+<summary>### Story: EXP03</summary>
+
+```
+* As user, I want to calculate my tax
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้
+```
+
+`POST:` /calculation
+
+```json
+{
+  "totalIncome": 500000.0,
+  "wht": 0.0,
+  "allowances": [
+    {
+      "allowanceType": "donation",
+      "amount": 200000.0
+    }
+  ]
+}
+```
+
+Response body
+
+```json
+{
+  "tax": 19000.0
+}
+```
+
+<details>
+<summary>Calculation guide</summary>
+
+500,000 (รายรับ) - 60,0000 (ค่าลดหย่อนส่วนตัว)  - 100,000 = 340,000
+
+| Tax Level | Tax |
+|-|-|
+|0-150,000|0|
+|150,001-500,000|19,000|
+|500,001-1,000,000|0|
+|1,000,001-2,000,000|0|
+|2,000,001 ขึ้นไป|0|
+
+</details>
+<!-- </details> -->
