@@ -263,7 +263,10 @@ Response body
 
 `POST:` /calculation/upload-csv
 
-```csv
+form-data: 
+  - taxFile: taxes.csv
+
+```
 totalIncome,wht,donation
 500000,0,0
 600000,40000,20000
