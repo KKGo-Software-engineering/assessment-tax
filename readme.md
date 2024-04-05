@@ -15,6 +15,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
   - 1,000,001 - 2,000,000 อัตราภาษี 20%
   - มากกว่า 2,000,000 อัตราภาษี 35%
 - เงินบริจาคสามารถหย่อนได้สูงสุด 100,000 บาท
+- ค่าลดหย่อนส่วนตัวต้องมีค่ามากกว่า 10,000 บาท
 
 ## Non-Functional Requirement
 
@@ -34,7 +35,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - ใช้ `go vet`
 - แยก Branch ของแต่ละ Story และ Merge กลับไปยัง `main` Branch
   - เช่น `feature/story-1`
-
+- admin กำหนด Basic authen ด้วย username: adminTax, password: admin!
 ## Stories Note
 
 - ผู้ใช้คำนวนภาษีตาม เงินได้ และฐานภาษี
@@ -46,7 +47,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ## User stories
 
-<summary>### Story: EXP01</summary>
+### Story: EXP01
 
 ```
 * As user, I want to calculate my tax
@@ -75,7 +76,6 @@ Response body
   "tax": 29000.0
 }
 ```
-
 <details>
 <summary>Calculation guide</summary>
 
@@ -90,7 +90,8 @@ Response body
 |2,000,001 ขึ้นไป|0|
 </details>
 
-<summary>### Story: EXP02</summary>
+-------
+### Story: EXP02
 
 ```
 * As user, I want to calculate my tax with WHT
@@ -119,7 +120,6 @@ Response body
   "tax": 4000.0
 }
 ```
-
 <details>
 <summary>Calculation guide</summary>
 
@@ -129,10 +129,8 @@ Response body
 
 </details>
 
-<!-- -- -->
-
-<!-- <details> -->
-<summary>### Story: EXP03</summary>
+-------
+### Story: EXP03
 
 ```
 * As user, I want to calculate my tax
@@ -162,8 +160,7 @@ Response body
 }
 ```
 
-<details>
-<summary>Calculation guide</summary>
+### Calculation guide
 
 500,000 (รายรับ) - 60,0000 (ค่าลดหย่อนส่วนตัว)  - 100,000 = 340,000
 
@@ -174,6 +171,115 @@ Response body
 |500,001-1,000,000|0|
 |1,000,001-2,000,000|0|
 |2,000,001 ขึ้นไป|0|
+----
 
-</details>
-<!-- </details> -->
+
+
+-------
+### Story: EXP04
+
+```
+* As user, I want to calculate my tax with tax level detail
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้ พร้อมระบุรายละเอียดของขั้นบันใดภาษี
+```
+
+`POST:` /calculation
+
+```json
+{
+  "totalIncome": 500000.0,
+  "wht": 0.0,
+  "allowances": [
+    {
+      "allowanceType": "donation",
+      "amount": 200000.0
+    }
+  ]
+}
+```
+
+Response body
+
+```json
+{
+  "tax": 19000.0,
+  "taxLevel": [
+    {
+      "level": "0-150,000",
+      "tax": 0.0
+    },
+    {
+      "level": "150,001-500,000",
+      "tax": 19000.0
+    },
+    {
+      "level": "500,001-1,000,000",
+      "tax": 0.0
+    },
+    {
+      "level": "1,000,001-2,000,000",
+      "tax": 0.0
+    },
+    {
+      "level": "2,000,001 ขึ้นไป",
+      "tax": 0.0
+    }
+  ]
+}
+```
+----
+
+### Story: EXP05
+
+```
+* As admin, I want to setting personal deduction
+ในฐานะ Admin ฉันต้องการตั้งค่าลดหย่อนส่วนตัว
+```
+
+`POST:` /admin/deduction/personal
+
+```json
+{
+  "amount": 70000.0
+}
+```
+
+Response body
+
+```json
+{
+  "personalDeduction": 70000.0
+}
+```
+----
+
+
+### Story: EXP06
+
+```
+* As user, I want to calculate my tax with csv
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีด้วยข้อมูลที่ upload เป็น csv
+```
+
+`POST:` /calculation/upload-csv
+
+```csv
+totalIncome,wht,donation
+500000,0,0
+600000,40000,20000
+750000,50000,15000
+```
+
+Response body
+
+```json
+{
+  "taxes": [
+    {
+      "totalIncome": 500000.0,
+      "tax": 29000.0
+    }
+    ...
+  ]
+}
+```
