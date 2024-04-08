@@ -19,6 +19,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ## Non-Functional Requirement
 
+- เขียนวิธีรันโปรแกรมไว้ที่ไฟล์ `GUIDE.md`
 - มี `Unit Test` ครอบคลุม
 - ใช้ `go module`
 - ใช้ go module `go mod init github.com/<your github name>/assessment-tax`
