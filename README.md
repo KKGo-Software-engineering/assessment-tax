@@ -59,7 +59,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้
 ```
 
-`POST:` /calculation
+`POST:` tax/calculations
 
 ```json
 {
@@ -103,7 +103,7 @@ Response body
 ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้ พร้อมกับข้อมูลหักภาษี ณ ที่จ่าย
 ```
 
-`POST:` /calculation
+`POST:` tax/calculations
 
 ```json
 {
@@ -142,7 +142,7 @@ Response body
 ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้
 ```
 
-`POST:` /calculation
+`POST:` tax/calculations
 
 ```json
 {
@@ -188,7 +188,7 @@ Response body
 ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้ พร้อมระบุรายละเอียดของขั้นบันใดภาษี
 ```
 
-`POST:` /calculation
+`POST:` tax/calculations
 
 ```json
 {
@@ -241,7 +241,7 @@ Response body
 ในฐานะ Admin ฉันต้องการตั้งค่าลดหย่อนส่วนตัว
 ```
 
-`POST:` /admin/deduction/personal
+`POST:` /admin/deductions/personal
 
 ```json
 {
@@ -266,7 +266,7 @@ Response body
 ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีด้วยข้อมูลที่ upload เป็น csv
 ```
 
-`POST:` /calculation/upload-csv
+`POST:` tax/calculations/upload-csv
 
 form-data:
   - taxFile: taxes.csv
@@ -286,7 +286,7 @@ Response body
     {
       "totalIncome": 500000.0,
       "tax": 29000.0
-    }
+    },
     ...
   ]
 }
