@@ -4,7 +4,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ## Functional Requirement
 
-- ผู้ใช้งาน สามารถส่งข้อมูลเพื่อคำนวนภาษีได้ (รองรับแค่ปี 2567)
+- ผู้ใช้งาน สามารถส่งข้อมูลเพื่อคำนวนภาษีได้
 - ผู้ใช้งาน แสดงภาษีที่ต้องจ่ายหรือได้รับในปีนั้น ๆ ได้
 - การคำนวนภาษีคำนวนจาก เงินหัก ณ ที่จ่าย / ค่าลดหย่อนส่วนตัว/ขั้นบันใดภาษี/เงินบริจาค
 - แอดมิน สามารถกำหนดค่าลดหย่อนส่วนตัวได้ โดยค่าเริ่มต้นที่ 60,000 บาท
@@ -21,10 +21,10 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 - มี `Unit Test` ครอบคลุม
 - ใช้ `go module`
-- ใช้ PostgreSQL
 - ใช้ go module `go mod init github.com/<your github name>/assessment-tax`
 - ใช้ go 1.21 or above
-- API port _MUST_ get from environment variable name `PORT` (should be able to config for API start from port `:2565`)
+- ใช้ `PostgreSQL`
+- API port _MUST_ get from `environment variable` name `PORT`
 - database url _MUST_ get from environment variable name `DATABASE_URL`
 - ใช้ `docker-compose` สำหรับต่อ Database
 - API support `Graceful Shutdown`
@@ -33,9 +33,13 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - ใช้ `HTTP Method` อย่างเหมาะสม
 - ใช้ `gofmt`
 - ใช้ `go vet`
-- แยก Branch ของแต่ละ Story และ Merge กลับไปยัง `main` Branch
-  - เช่น `feature/story-1`
-- admin กำหนด Basic authen ด้วย username: adminTax, password: admin!
+- แยก Branch ของแต่ละ Story ออกจาก `main` และ Merge กลับไปยัง `main` Branch
+  - เช่น story ที่ 1 จะใช้ branch ชื่อ `feature/story-1` หรือ `feature/store-1-create-tax-calculation`
+- admin กำหนด Basic authen ด้วย username: `adminTax`, password: `admin!`
+
+## Assumption
+- รองรับแค่ปีเดียวคือ 2567
+
 ## Stories Note
 
 - ผู้ใช้คำนวนภาษีตาม เงินได้ และฐานภาษี
@@ -263,7 +267,7 @@ Response body
 
 `POST:` /calculation/upload-csv
 
-form-data: 
+form-data:
   - taxFile: taxes.csv
 
 ```
