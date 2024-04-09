@@ -374,7 +374,7 @@ Response body
 
 ----
 
-### Story: EXP09
+### Story: EXP08
 
 ```
 * As admin, I want to setting k-receipt deduction
