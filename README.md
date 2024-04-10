@@ -62,7 +62,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 
 ```
 * As user, I want to calculate my tax
-ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจากข้อมูลที่ส่งให้
 ```
 
 `POST:` tax/calculations
@@ -145,7 +145,7 @@ Response body
 
 ```
 * As user, I want to calculate my tax
-ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจาก ข้อมูลที่ส่งให้
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีจากข้อมูลที่ส่งให้และข้อมูลค่าลดหย่อน
 ```
 
 `POST:` tax/calculations
@@ -270,7 +270,7 @@ Response body
 
 ```
 * As user, I want to calculate my tax with csv
-ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีด้วยข้อมูลที่ upload เป็น csv
+ในฐานะผู้ใช้ ฉันต้องการคำนวนภาษีด้วยข้อมูลที่ upload เป็น csv และมี validation เช่น ใส่ empty ไม่ได้ หรือ ใส่ข้อมูลผิด format ไม่ได้
 ```
 
 `POST:` tax/calculations/upload-csv
@@ -376,7 +376,7 @@ Response body
 
 ```
 * As admin, I want to setting k-receipt deduction
-ในฐานะ Admin ฉันต้องการตั้งค่า k-receipt สูงสุด
+ในฐานะ Admin ฉันต้องการตั้งค่า k-receipt สำหรับลดหย่อน
 ```
 
 `POST:` /admin/deductions/k-receipt
