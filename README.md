@@ -33,11 +33,9 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - ใช้ `docker-compose` สำหรับต่อ Database
 - API support `Graceful Shutdown`
 - มี Dockerfile สำหรับ build image และเป็น `Multi-stage build`
-- ใช้ `HTTP Status Code` อย่างเหมาะสม
-- ใช้ `HTTP Method` อย่างเหมาะสม
-- ใช้ `gofmt`
-- ใช้ `go vet`
-- แยก Branch ของแต่ละ Story ออกจาก `main` และ Merge กลับไปยัง `main` Branch
+- ใช้ `HTTP Method` และ `HTTP Status Code` อย่างเหมาะสม
+- ใช้ `gofmt` และ `go vet`
+- แยก Branch ของแต่ละ Story ออกจาก `main` และ Merge กลับไปยัง `main` Branch เสมอ
   - เช่น story ที่ 1 จะใช้ branch ชื่อ `feature/story-1` หรือ `feature/store-1-create-tax-calculation`
 - admin กำหนด Basic authen ด้วย username: `adminTax`, password: `admin!`
 - **การ run program จะใช้คำสั่ง docker-compose up เพื่อเตรียม environment และ go run main.go เพื่อ start api**
