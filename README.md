@@ -39,8 +39,15 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - แยก Branch ของแต่ละ Story ออกจาก `main` และ Merge กลับไปยัง `main` Branch เสมอ
   - เช่น story ที่ 1 จะใช้ branch ชื่อ `feature/story-1` หรือ `feature/store-1-create-tax-calculation`
 - admin กำหนด Basic authen ด้วย username: `adminTax`, password: `admin!`
+  - username และ password ต้องเป็น environment variable
+  - และ `env` ต้องเป็นชื่อ `ADMIN_USERNAME` และ `ADMIN_PASSWORD`
 - **การ run program จะใช้คำสั่ง docker-compose up เพื่อเตรียม environment และ go run main.go เพื่อ start api**
   - **หากต้องมีการใช้คำสั่งอื่น ๆ เพื่อทำให้โปรแกรมทำงานได้ จะไม่นับคะแนนหรือถูกหักคะแนน**
+  - การตรวจจะทำการ export `env` ไว้ล่วงหน้าก่อนรัน ดังนี้
+	- `export PORT=8080`
+	- `export DATABASE_URL={REPLACE_ME}`
+	- `export ADMIN_USERNAME=adminTax`
+	- `export ADMIN_PASSWORD=admin!`
 - port ของ api จะต้องเป็น 8080
 
 ## Assumption
