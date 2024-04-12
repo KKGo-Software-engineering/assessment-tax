@@ -32,6 +32,7 @@ K-Tax เป็น Application คำนวนภาษี ที่ให้ผ
 - database url _MUST_ get from environment variable name `DATABASE_URL`
 - ใช้ `docker-compose` สำหรับต่อ Database
 - API support `Graceful Shutdown`
+  - เช่น ถ้ามีการกด `Ctrl + C` จะ print `shutting down the server`
 - มี Dockerfile สำหรับ build image และเป็น `Multi-stage build`
 - ใช้ `HTTP Method` และ `HTTP Status Code` อย่างเหมาะสม
 - ใช้ `gofmt` และ `go vet`
