@@ -2,6 +2,14 @@
 
 K-Tax เป็น Application คำนวนภาษี ที่ให้ผู้ใช้งานสามารถคำนวนภาษีบุคคลธรรมดา ตามขั้นบันใดภาษี พร้อมกับคำนวนค่าลดหย่อน และภาษีที่ต้องได้รับคืน
 
+## Getting Started
+
+1. Clone this repository
+2. Create repository in your `Github` account
+3. Push starter code to your `Github` account
+4. Create new branch that according to story name
+5. Follow `Functional Requirement` and `Non-Functional Requirement`
+
 ## Functional Requirement
 
 - ผู้ใช้งาน สามารถส่งข้อมูลเพื่อคำนวนภาษีได้
