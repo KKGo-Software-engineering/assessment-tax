@@ -7,3 +7,9 @@ test:
 test-cover:
 	go test -coverprofile coverage.html ./...
 	go tool cover -html=coverage.html
+
+build-docker:
+	docker build -t ktaxes .
+
+run-docker:
+	docker run -p 8080:8080 ktaxes
