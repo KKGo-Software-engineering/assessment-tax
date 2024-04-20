@@ -1,8 +1,8 @@
-module github.com/KKGo-Software-engineering/assessment-tax
+module github.com/namekridchai/assessment_tax
 
-go 1.21.9
+go 1.22.0
 
-require github.com/labstack/echo/v4 v4.11.4
+require github.com/labstack/echo/v4 v4.12.0
 
 require (
 	github.com/labstack/gommon v0.4.2 // indirect
