@@ -45,9 +45,11 @@ func TestCalculateTax(t *testing.T) {
 			incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: test.income, Wht: 0.0}
 			incomeTaxCalculator.addAllowance(a)
 
+			adminKreceive := 0.0
+
 			want := test.want
 
-			got := incomeTaxCalculator.CalculateTax(test.personalAllowance)
+			got := incomeTaxCalculator.CalculateTax(test.personalAllowance, adminKreceive)
 
 			if got != want {
 				t.Errorf("got = %v, want %v", got, want)
@@ -64,9 +66,12 @@ func TestCalculateTaxWithWht(t *testing.T) {
 
 		incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: 3000000.0, Wht: 60000.0}
 
+		personalAllowance := 0.0
+		adminKreceive := 0.0
+
 		want := 600000.0
 
-		got := incomeTaxCalculator.CalculateTax(0)
+		got := incomeTaxCalculator.CalculateTax(personalAllowance, adminKreceive)
 
 		if got != want {
 			t.Errorf("got = %v, want %v", got, want)
@@ -94,9 +99,12 @@ func TestCalculateTaxWithDonationAllowance(t *testing.T) {
 			a := allowance{AllowanceType: "donation", Amount: test.dontation_allowance}
 			incomeTaxCalculator.addAllowance(a)
 
+			personalAllowance := 0.0
+			adminKreceive := 0.0
+
 			want := test.want
 
-			got := incomeTaxCalculator.CalculateTax(0)
+			got := incomeTaxCalculator.CalculateTax(personalAllowance, adminKreceive)
 
 			if got != want {
 				t.Errorf("got = %v, want %v", got, want)
@@ -107,6 +115,7 @@ func TestCalculateTaxWithDonationAllowance(t *testing.T) {
 }
 
 func TestCalculateTaxWithNonExistAllowance(t *testing.T) {
+
 	test_description := fmt.Sprintf("should return %v when income is %v and  allowance is %v",
 		660000.0, 3000000.0, 100000.0,
 	)
@@ -116,9 +125,12 @@ func TestCalculateTaxWithNonExistAllowance(t *testing.T) {
 		a := allowance{AllowanceType: "donate to aj.dang guitar", Amount: 100000.0}
 		incomeTaxCalculator.addAllowance(a)
 
+		personalAllowance := 0.0
+		adminKreceive := 0.0
+
 		want := 660000.0
 
-		got := incomeTaxCalculator.CalculateTax(0)
+		got := incomeTaxCalculator.CalculateTax(personalAllowance, adminKreceive)
 
 		if got != want {
 			t.Errorf("got = %v, want %v", got, want)
@@ -127,21 +139,63 @@ func TestCalculateTaxWithNonExistAllowance(t *testing.T) {
 }
 
 func TestCalculateTaxWithKrcpAllowance(t *testing.T) {
-	test_description := fmt.Sprintf("should return %v when income is %v and  allowance is %v",
-		600000.0, 3100000.0, 100000.0,
-	)
-	t.Run(test_description, func(t *testing.T) {
+	tests := []struct {
+		totalIncome float64
+		adminKrcp   float64
+		krcp        float64
+		want        float64
+	}{
+		{totalIncome: 3100000, adminKrcp: 100000.0, krcp: 100000.0, want: 660000},
+		{totalIncome: 3090000, adminKrcp: 100000.0, krcp: 90000.0, want: 660000},
+		{totalIncome: 3100000, adminKrcp: 100000.0, krcp: 200000.0, want: 660000},
+	}
 
-		incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: 3000000.0, Wht: 0.0}
-		a := allowance{AllowanceType: "donate to aj.dang guitar", Amount: 100000.0}
-		incomeTaxCalculator.addAllowance(a)
+	for _, test := range tests {
+		test_description := fmt.Sprintf("should return %v when income is %v admin allowance is %v user allowance is %v",
+			test.want, test.totalIncome, test.adminKrcp, test.krcp)
+		t.Run(test_description, func(t *testing.T) {
+			incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: test.totalIncome, Wht: 0.0}
+			a := allowance{AllowanceType: "k-receipt", Amount: test.krcp}
+			incomeTaxCalculator.addAllowance(a)
+
+			personalAllowance := 0.0
+			adminKreceive := test.adminKrcp
+
+			want := 660000.0
+
+			got := incomeTaxCalculator.CalculateTax(personalAllowance, adminKreceive)
+
+			if got != want {
+				t.Errorf("got = %v, want %v", got, want)
+			}
+		})
+	}
+
+}
+
+func TestCalculateTaxWithMultipleAllowance(t *testing.T) {
+
+	test_description := fmt.Sprintf("should return %v when income is %v krcp is %v donation is %v",
+		660000.0, 3200000.0, 100000.0, 100000.0)
+	t.Run(test_description, func(t *testing.T) {
+		incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: 3200000.0, Wht: 0.0}
+
+		a1 := allowance{AllowanceType: "k-receipt", Amount: 100000.0}
+		a2 := allowance{AllowanceType: "donation", Amount: 100000.0}
+
+		incomeTaxCalculator.addAllowance(a1)
+		incomeTaxCalculator.addAllowance(a2)
+
+		personalAllowance := 0.0
+		adminKreceive := 100000.0
 
 		want := 660000.0
 
-		got := incomeTaxCalculator.CalculateTax(0)
+		got := incomeTaxCalculator.CalculateTax(personalAllowance, adminKreceive)
 
 		if got != want {
 			t.Errorf("got = %v, want %v", got, want)
 		}
 	})
+
 }
