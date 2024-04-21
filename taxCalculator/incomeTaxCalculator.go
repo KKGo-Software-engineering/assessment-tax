@@ -12,11 +12,16 @@ func (i *IncomeTaxCalculator) addAllowance(a allowance) {
 	i.Allowances = append(i.Allowances, a)
 }
 
-func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64) float64 {
+func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64, adminKrcp float64) float64 {
 
 	netIncome := max(i.TotalIncome-personalAllowance, 0)
 	if len(i.Allowances) > 0 && strings.ToLower(i.Allowances[0].AllowanceType) == "donation" {
 		netIncome -= min(i.Allowances[0].Amount, 100000)
+
+	}
+
+	if len(i.Allowances) > 0 && strings.ToLower(i.Allowances[0].AllowanceType) == "k-receipt" {
+		netIncome -= min(i.Allowances[0].Amount, adminKrcp)
 
 	}
 
