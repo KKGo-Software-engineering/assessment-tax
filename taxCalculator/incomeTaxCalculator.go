@@ -15,14 +15,17 @@ func (i *IncomeTaxCalculator) addAllowance(a allowance) {
 func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64, adminKrcp float64) float64 {
 
 	netIncome := max(i.TotalIncome-personalAllowance, 0)
-	if len(i.Allowances) > 0 && strings.ToLower(i.Allowances[0].AllowanceType) == "donation" {
-		netIncome -= min(i.Allowances[0].Amount, 100000)
 
-	}
+	for _, a := range i.Allowances {
+		if strings.ToLower(a.AllowanceType) == "donation" {
+			netIncome -= min(a.Amount, 100000)
 
-	if len(i.Allowances) > 0 && strings.ToLower(i.Allowances[0].AllowanceType) == "k-receipt" {
-		netIncome -= min(i.Allowances[0].Amount, adminKrcp)
+		}
 
+		if strings.ToLower(a.AllowanceType) == "k-receipt" {
+			netIncome -= min(a.Amount, adminKrcp)
+
+		}
 	}
 
 	out := sum(taxStep1(netIncome), taxStep2(netIncome), taxStep3(netIncome),

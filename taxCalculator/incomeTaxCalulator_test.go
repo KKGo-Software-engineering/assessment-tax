@@ -172,3 +172,30 @@ func TestCalculateTaxWithKrcpAllowance(t *testing.T) {
 	}
 
 }
+
+func TestCalculateTaxWithMultipleAllowance(t *testing.T) {
+
+	test_description := fmt.Sprintf("should return %v when income is %v krcp is %v donation is %v",
+		660000.0, 3200000.0, 100000.0, 100000.0)
+	t.Run(test_description, func(t *testing.T) {
+		incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: 3200000.0, Wht: 0.0}
+
+		a1 := allowance{AllowanceType: "k-receipt", Amount: 100000.0}
+		a2 := allowance{AllowanceType: "donation", Amount: 100000.0}
+
+		incomeTaxCalculator.addAllowance(a1)
+		incomeTaxCalculator.addAllowance(a2)
+
+		personalAllowance := 0.0
+		adminKreceive := 100000.0
+
+		want := 660000.0
+
+		got := incomeTaxCalculator.CalculateTax(personalAllowance, adminKreceive)
+
+		if got != want {
+			t.Errorf("got = %v, want %v", got, want)
+		}
+	})
+
+}
