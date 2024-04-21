@@ -16,7 +16,7 @@ func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64) float64 {
 
 	netIncome := max(i.TotalIncome-personalAllowance, 0)
 	if len(i.Allowances) > 0 && strings.ToLower(i.Allowances[0].AllowanceType) == "donation" {
-		netIncome -= i.Allowances[0].Amount
+		netIncome -= min(i.Allowances[0].Amount, 100000)
 
 	}
 
