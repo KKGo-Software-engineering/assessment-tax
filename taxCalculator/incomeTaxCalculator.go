@@ -1,7 +1,5 @@
 package taxCalculator
 
-import "errors"
-
 type IncomeTaxCalculator struct {
 	TotalIncome float64
 	Wht         float64
@@ -12,32 +10,57 @@ func (i *IncomeTaxCalculator) addAllowance(a allowance) {
 	i.Allowances = append(i.Allowances, a)
 }
 
-func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64) (float64, error) {
+func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64) float64 {
 
 	netIncome := max(i.TotalIncome-personalAllowance, 0)
 
-	if 0.0 <= netIncome && netIncome <= 150000 {
-		return 0.0, nil
-	} else if 150000 < netIncome && netIncome <= 500000 {
-		netIncome -= 150000
-		return netIncome * 0.1, nil
-	} else if 500000 < netIncome && netIncome <= 1000000 {
-		netIncome -= 500000
-		cumelativeTax := (500000 - 150000) * 0.1
-		return (netIncome * 0.15) + cumelativeTax, nil
+	out := sum(taxStep1(netIncome), taxStep2(netIncome), taxStep3(netIncome),
+		taxStep4(netIncome))
+
+	return out
+
+}
+
+func sum(tax ...float64) float64 {
+	sum := 0.0
+	for _, v := range tax {
+		sum += v
 	}
+	return sum
+}
 
-	// else if netIncome == 500001.0 {
-	// 	return 3500.15, nil
-	// } else if netIncome == 1000000 {
-	// 	return 110000.0, nil
-	// } else if netIncome == 500002 {
-	// 	return 3500.30, nil
-	// } else if netIncome == 940000 {
-	// 	return 101000, nil
-	// }
+func taxStep1(netIncome float64) float64 {
+	if 150000 < netIncome && netIncome <= 500000 {
+		return (netIncome - 150000) * 0.1
+	} else if netIncome > 500000 {
+		return (500000 - 150000) * 0.1
+	}
+	return 0
+}
 
-	return 0, errors.New("input out of range")
+func taxStep2(netIncome float64) float64 {
+	if 500000 < netIncome && netIncome <= 1000000 {
+		return (netIncome - 500000) * 0.15
+	} else if netIncome > 1000000 {
+		return (1000000 - 500000) * 0.15
+	}
+	return 0
+}
+
+func taxStep3(netIncome float64) float64 {
+	if 1000000 < netIncome && netIncome <= 2000000 {
+		return (netIncome - 1000000) * 0.2
+	} else if netIncome > 1000000 {
+		return (2000000 - 1000000) * 0.2
+	}
+	return 0
+}
+
+func taxStep4(netIncome float64) float64 {
+	if netIncome > 2000000 {
+		return (netIncome - 2000000) * 0.35
+	}
+	return 0
 
 }
 

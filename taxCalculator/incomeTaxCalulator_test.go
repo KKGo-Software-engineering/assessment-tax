@@ -29,6 +29,11 @@ func TestCalculateTax(t *testing.T) {
 		{income: 500002.0, personalAllowance: 0, want: 35000.30},
 		{income: 1000000.0, personalAllowance: 0, want: 110000},
 		{income: 1000000.0, personalAllowance: 60000, want: 101000},
+		{income: 1000001.0, personalAllowance: 0, want: 110000.2},
+		{income: 1000002.0, personalAllowance: 0, want: 110000.4},
+		{income: 2000000.0, personalAllowance: 0, want: 310000},
+		{income: 2000001.0, personalAllowance: 0, want: 310000.35},
+		{income: 3000000.0, personalAllowance: 0, want: 660000},
 	}
 
 	for _, test := range tests {
@@ -42,7 +47,7 @@ func TestCalculateTax(t *testing.T) {
 
 			want := test.want
 
-			got, _ := incomeTaxCalculator.CalculateTax(test.personalAllowance)
+			got := incomeTaxCalculator.CalculateTax(test.personalAllowance)
 
 			if got != want {
 				t.Errorf("got = %v, want %v", got, want)
