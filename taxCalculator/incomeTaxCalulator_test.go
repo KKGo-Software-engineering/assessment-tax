@@ -12,7 +12,6 @@ func TestCalculateTax(t *testing.T) {
 		personalAllowance float64
 		want              float64
 	}{
-		{income: 500000.0, personalAllowance: 60000, want: 29000.0},
 		{income: 0.0, personalAllowance: 60000, want: 0.0},
 		{income: 150000.0, personalAllowance: 60000, want: 0.0},
 		{income: 149999.0, personalAllowance: 60000, want: 0.0},
@@ -22,6 +21,10 @@ func TestCalculateTax(t *testing.T) {
 		{income: 210000.0, personalAllowance: 60000, want: 0.0},
 		{income: 209999.0, personalAllowance: 60000, want: 0.0},
 		{income: 150001.0, personalAllowance: 0, want: 0.1},
+		{income: 150002.0, personalAllowance: 0, want: 0.2},
+		{income: 500000.0, personalAllowance: 0, want: 35000},
+		{income: 499999.0, personalAllowance: 0, want: 34999.9},
+		{income: 500000.0, personalAllowance: 60000, want: 29000.0},
 	}
 
 	for _, test := range tests {
