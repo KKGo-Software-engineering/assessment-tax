@@ -57,8 +57,8 @@ func TestCalculateTax(t *testing.T) {
 
 }
 func TestCalculateTaxWithWht(t *testing.T) {
-	test_description := fmt.Sprintf("should return %v when income is %v and personal allowance is %v",
-		600000.0, 3000000.0, 0.0,
+	test_description := fmt.Sprintf("should return %v when income is %v and wht is %v",
+		600000.0, 3000000.0, 6000.0,
 	)
 	t.Run(test_description, func(t *testing.T) {
 
