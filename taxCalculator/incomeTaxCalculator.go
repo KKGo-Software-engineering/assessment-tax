@@ -1,5 +1,7 @@
 package taxCalculator
 
+import "strings"
+
 type IncomeTaxCalculator struct {
 	TotalIncome float64
 	Wht         float64
@@ -13,6 +15,10 @@ func (i *IncomeTaxCalculator) addAllowance(a allowance) {
 func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64) float64 {
 
 	netIncome := max(i.TotalIncome-personalAllowance, 0)
+	if len(i.Allowances) > 0 && strings.ToLower(i.Allowances[0].AllowanceType) == "donation" {
+		netIncome -= min(i.Allowances[0].Amount, 100000)
+
+	}
 
 	out := sum(taxStep1(netIncome), taxStep2(netIncome), taxStep3(netIncome),
 		taxStep4(netIncome))
