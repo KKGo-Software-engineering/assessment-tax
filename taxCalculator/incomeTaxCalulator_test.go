@@ -25,10 +25,16 @@ func TestCalculateTax(t *testing.T) {
 		{income: 500000.0, personalAllowance: 0, want: 35000},
 		{income: 499999.0, personalAllowance: 0, want: 34999.9},
 		{income: 500000.0, personalAllowance: 60000, want: 29000.0},
+		{income: 500001.0, personalAllowance: 0, want: 35000.15},
+		{income: 500002.0, personalAllowance: 0, want: 35000.30},
+		{income: 1000000.0, personalAllowance: 0, want: 110000},
+		{income: 1000000.0, personalAllowance: 60000, want: 101000},
 	}
 
 	for _, test := range tests {
-		test_description := fmt.Sprintf("should return %v when income is %v", test.want, test.income)
+		test_description := fmt.Sprintf("should return %v when income is %v and personal allowance is %v",
+			test.want, test.income, test.personalAllowance,
+		)
 		t.Run(test_description, func(t *testing.T) {
 			a := allowance{AllowanceType: "donation", Amount: 0.0}
 			incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: test.income, Wht: 0.0}
@@ -36,7 +42,7 @@ func TestCalculateTax(t *testing.T) {
 
 			want := test.want
 
-			got := incomeTaxCalculator.CalculateTax(test.personalAllowance)
+			got, _ := incomeTaxCalculator.CalculateTax(test.personalAllowance)
 
 			if got != want {
 				t.Errorf("got = %v, want %v", got, want)
