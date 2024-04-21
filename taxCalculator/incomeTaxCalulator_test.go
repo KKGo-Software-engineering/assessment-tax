@@ -108,6 +108,26 @@ func TestCalculateTaxWithDonationAllowance(t *testing.T) {
 
 func TestCalculateTaxWithNonExistAllowance(t *testing.T) {
 	test_description := fmt.Sprintf("should return %v when income is %v and  allowance is %v",
+		660000.0, 3000000.0, 100000.0,
+	)
+	t.Run(test_description, func(t *testing.T) {
+
+		incomeTaxCalculator := IncomeTaxCalculator{TotalIncome: 3000000.0, Wht: 0.0}
+		a := allowance{AllowanceType: "donate to aj.dang guitar", Amount: 100000.0}
+		incomeTaxCalculator.addAllowance(a)
+
+		want := 660000.0
+
+		got := incomeTaxCalculator.CalculateTax(0)
+
+		if got != want {
+			t.Errorf("got = %v, want %v", got, want)
+		}
+	})
+}
+
+func TestCalculateTaxWithKrcpAllowance(t *testing.T) {
+	test_description := fmt.Sprintf("should return %v when income is %v and  allowance is %v",
 		600000.0, 3100000.0, 100000.0,
 	)
 	t.Run(test_description, func(t *testing.T) {
