@@ -17,7 +17,7 @@ func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64) float64 {
 	out := sum(taxStep1(netIncome), taxStep2(netIncome), taxStep3(netIncome),
 		taxStep4(netIncome))
 
-	return out
+	return out - i.Wht
 
 }
 
