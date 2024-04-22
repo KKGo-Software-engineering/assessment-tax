@@ -15,12 +15,12 @@ func (i *IncomeTaxCalculator) addAllowance(a allowance) {
 func (i IncomeTaxCalculator) CalculateTax(personalAllowance float64, adminKrcp float64) float64 {
 
 	netIncome := max(i.TotalIncome-personalAllowance, 0)
-	m := make(map[string]float64)
-	m["donation"] = 100000.0
-	m["k-receipt"] = adminKrcp
+	allowanceMap := make(map[string]float64)
+	allowanceMap["donation"] = 100000.0
+	allowanceMap["k-receipt"] = adminKrcp
 
 	for _, a := range i.Allowances {
-		netIncome -= min(a.Amount, m[strings.ToLower(a.AllowanceType)])
+		netIncome -= min(a.Amount, allowanceMap[strings.ToLower(a.AllowanceType)])
 	}
 
 	out := sum(taxStep1(netIncome), taxStep2(netIncome), taxStep3(netIncome),
