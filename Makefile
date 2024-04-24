@@ -70,6 +70,7 @@ test/cover:
 	@echo '== test application with coverage =='
 	go test -v -race -coverprofile=/tmp/coverage.out ./...
 	go tool cover -html=/tmp/coverage.out
+	go tool cover -html=coverage.out -o coverage.html
 
 ## run: run application
 .PHONY: run
