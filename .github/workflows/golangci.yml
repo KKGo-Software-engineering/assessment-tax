@@ -1,0 +1,33 @@
+name: golang CI
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: write
+
+jobs:
+  check_quality:
+    name: Quality Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.2'
+          cache: false
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.57.2
+          only-new-issues: true
+      - name: golangci-test
+        run: go test ./... -v
+      - name: govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: '1.22.2'
+          go-package: ./...

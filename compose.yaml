@@ -7,3 +7,5 @@ services:
       POSTGRES_DB: ktaxes
     ports:
       - '5432:5432'
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/
