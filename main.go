@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -13,11 +12,13 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/wit-switch/assessment-tax/config"
 	"github.com/wit-switch/assessment-tax/infrastructure"
+	"github.com/wit-switch/assessment-tax/pkg/errorx"
 )
 
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelInfo,
+		Level:       slog.LevelInfo,
+		ReplaceAttr: errorx.ReplaceAttr,
 	}))
 	slog.SetDefault(logger)
 
@@ -53,7 +54,7 @@ func main() {
 	quit := make(chan os.Signal, 1)
 
 	go func() {
-		if svErr := e.StartServer(server); !errors.Is(svErr, http.ErrServerClosed) {
+		if svErr := e.StartServer(server); !errorx.Is(svErr, http.ErrServerClosed) {
 			slog.Error("[!] failed to serve server", slog.Any("err", svErr))
 			os.Exit(1)
 		}

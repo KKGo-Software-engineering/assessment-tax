@@ -19,6 +19,7 @@ init:
 	go install go.uber.org/mock/mockgen@latest
 	go install honnef.co/go/tools/cmd/staticcheck@latest
 	go install golang.org/x/vuln/cmd/govulncheck@latest
+	go install github.com/onsi/ginkgo/v2/ginkgo
 
 
 
@@ -62,14 +63,13 @@ mock:
 .PHONY: test
 test:
 	@echo '== test application =='
-	go test -v -race ./...
+	ginkgo -r -v -race
 
 ## test/cover: run all tests and display coverage
 .PHONY: test/cover
 test/cover:
 	@echo '== test application with coverage =='
-	go test -v -race -coverprofile=/tmp/coverage.out ./...
-	go tool cover -html=/tmp/coverage.out
+	ginkgo -r -v -race -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
 
 ## run: run application
