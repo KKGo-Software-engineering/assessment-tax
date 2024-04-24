@@ -12,6 +12,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/wit-switch/assessment-tax/config"
+	"github.com/wit-switch/assessment-tax/infrastructure"
 )
 
 func main() {
@@ -22,7 +23,22 @@ func main() {
 
 	cfg := config.GetConfig()
 
+	dbClient, err := infrastructure.NewPostgresClient(context.Background(), cfg.PostgreSQL)
+	if err != nil {
+		slog.Error("[!] failed to connect postgres", slog.Any("err", err))
+		os.Exit(1)
+	}
+
 	e := echo.New()
+
+	e.GET("/healthcheck", func(c echo.Context) error {
+		ctx := c.Request().Context()
+		if dbErr := dbClient.Ping(ctx); dbErr != nil {
+			return dbErr
+		}
+
+		return c.String(http.StatusOK, "OK")
+	})
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, Go Bootcamp!")
@@ -37,8 +53,8 @@ func main() {
 	quit := make(chan os.Signal, 1)
 
 	go func() {
-		if err := e.StartServer(server); !errors.Is(err, http.ErrServerClosed) {
-			slog.Error("[!] failed to serve server", slog.Any("err", err))
+		if svErr := e.StartServer(server); !errors.Is(svErr, http.ErrServerClosed) {
+			slog.Error("[!] failed to serve server", slog.Any("err", svErr))
 			os.Exit(1)
 		}
 	}()
@@ -51,9 +67,12 @@ func main() {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		if err := e.Shutdown(ctx); err != nil {
-			slog.Error("[!] failed to shutdown server", slog.Any("err", err))
+		if svErr := e.Shutdown(ctx); svErr != nil {
+			slog.Error("[!] failed to shutdown server", slog.Any("err", svErr))
 		}
+
+		slog.Info("close postgres connection")
+		dbClient.Close()
 
 		slog.Info("shutting down the server")
 	}
