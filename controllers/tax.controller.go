@@ -23,6 +23,14 @@ func (t TaxController) CalculateTax(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Total income must be greater than or equal to 0")
 	}
 
+	if(len(taxRequest.Allowances) == 0) {
+		return c.JSON(http.StatusBadRequest, "Allowances must not be empty")
+	}
+
+	if(taxRequest.TotalIncome < 150000) {
+		return c.JSON(http.StatusOK, response.TaxResponse{Tax: 0})
+	}
+
 	tax := libs.CalculateTax(taxRequest.TotalIncome, taxRequest.Wht, taxRequest.Allowances)
 	tax_total_with_deduction := tax - constants.TaxDeductionInit().Deduction
 	tax_rate := libs.CalculateTaxRate(tax_total_with_deduction)
