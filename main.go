@@ -12,7 +12,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/wit-switch/assessment-tax/config"
 	"github.com/wit-switch/assessment-tax/infrastructure"
+	httphdl "github.com/wit-switch/assessment-tax/internal/handler/http"
+	"github.com/wit-switch/assessment-tax/internal/handler/middleware"
 	"github.com/wit-switch/assessment-tax/pkg/errorx"
+	"github.com/wit-switch/assessment-tax/pkg/validator"
 )
 
 func main() {
@@ -30,7 +33,16 @@ func main() {
 		os.Exit(1)
 	}
 
+	mdw := middleware.NewMiddleware(middleware.Dependencies{})
+
 	e := echo.New()
+
+	e.HTTPErrorHandler = httphdl.HTTPErrorHandler
+	e.Validator = httphdl.NewValidator(validator.New())
+	// with no proxy
+	e.IPExtractor = echo.ExtractIPDirect()
+	// with proxies using X-Forwarded-For header
+	// e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
 	e.GET("/healthcheck", func(c echo.Context) error {
 		ctx := c.Request().Context()
@@ -40,6 +52,10 @@ func main() {
 
 		return c.String(http.StatusOK, "OK")
 	})
+
+	e.Use(
+		mdw.Logger(),
+	)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, Go Bootcamp!")

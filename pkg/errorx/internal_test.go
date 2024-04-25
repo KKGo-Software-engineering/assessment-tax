@@ -35,7 +35,12 @@ var _ = Describe("Internal", func() {
 	)
 
 	Describe("InternalError", func() {
-		errBase := errorx.NewInternalErr[any](errorx.CodeUnknown)
+		var (
+			errBase *errorx.InternalError[any]
+		)
+		BeforeEach(func() {
+			errBase = errorx.NewInternalErr[any](errorx.CodeUnknown)
+		})
 
 		When("get code", func() {
 			It("should get code from error", func() {
